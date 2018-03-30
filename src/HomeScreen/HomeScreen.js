@@ -71,7 +71,8 @@ export default class HomeScreen extends React.Component {
             <Text>Login</Text>
           </Button>
 
-          <Text style={{alignSelf:'center', color:'#a62127',fontWeight:'bold', marginBottom: 12}} onPress={() => this.props.navigation.navigate("Signup")}>Sign up?</Text>
+          <Text style={{alignSelf:'center', color:'#a62127',fontWeight:'bold', marginBottom: 12}} 
+          onPress={() => this.props.navigation.navigate("Signup")}>Sign up?</Text>
           </Content>
         
           <Card>

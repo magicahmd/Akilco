@@ -24,7 +24,9 @@ import ExpandableList from './ExpandableList'
 import {Constants} from "./Constants";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Localimage from '../../Components/Localimage'
-import {RestaurantMenu} from './RestaurantMenu/index'
+//import {RestaurantMenu} from './RestaurantMenu/index'
+import {MenuList} from "./RestaurantMenu/List";
+
 
 
 
@@ -37,24 +39,27 @@ export default class RestaurantProfile extends React.Component {
     }
 
   componentWillMount() {
+
     this.data = [
       {
-        groupHeaderData: {title: 'Dashboard'},
-        groupListData: ['Calls', 'Chart', 'Map']
+        groupHeaderData: {title: 'وجبات رئيسية'},
+        groupListData: ['مقلوبة', 'أوزي', 'سمك']
       },
       {
-        groupHeaderData: {title: 'Profile'},
-        groupListData: ['User', 'Add contact', 'Calendar']
+        groupHeaderData: {title: 'مقبّلات'},
+        groupListData: ['1', '2', '3']
       },
       {
-        groupHeaderData: {title: 'Messages'},
-        groupListData: ['Inbox', 'Sent', 'Deleted']
+        groupHeaderData: {title: 'مشروبات باردة'},
+        groupListData: ['1', '2', '3']
       },
       {
-        groupHeaderData: {title: 'Settings'},
-        groupListData: ['Fill Beer', 'Adjust', 'Alarm']
+        groupHeaderData: {title: 'مشروبات ساخنة'},
+        groupListData: ['1', '2', '3']
       }
-    ]
+    ],
+    this.toDish = this.props.navigation;
+
   }
 
   render() {
@@ -63,10 +68,6 @@ export default class RestaurantProfile extends React.Component {
          <ImageBackground source={require('../images/background2.jpg')}  style={{flex:1,width:'100%',height:'100%'}}>
         
         <Content>
-
-          <Button onPress={() => this.props.navigation.navigate("HomeScreen")}>
-        <Text style={styles.listItemText}>Teeeest</Text>
-        </Button>
 
         <Content padder>
         <Content style={styles.RestaurantImage}>
@@ -79,14 +80,13 @@ export default class RestaurantProfile extends React.Component {
             <CardItem>
               <Body>
                 <Text>For tables</Text>
-                <Button onPress={() => this.props.navigation.navigate("Dish")} ><Text>Test it.</Text></Button>
               </Body>
             </CardItem>
           </Card>
         </Content>
 
        
-        <RestaurantMenu/>
+       <MenuList data={this.data} toDish={this.toDish}/>
 
           
         </Content>

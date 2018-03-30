@@ -7,6 +7,13 @@ import {
   LayoutAnimation
 } from 'react-native';
 
+import { StackNavigator } from "react-navigation";
+import HomeScreen from '../src/HomeScreen/HomeScreen'
+
+const MenuRouter = StackNavigator({
+  HomeScreen: {screen:HomeScreen}
+});
+
 export class ExpandableList extends Component {
 
   constructor(props) {

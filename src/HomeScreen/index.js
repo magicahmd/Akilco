@@ -9,15 +9,21 @@ import Login from "../Login/Login"
 import Signup from "../Login/Signup"
 import Dish from "../Dish/Dish";
 import SideBar from "../SideBar/SideBar";
+import {RestaurantMenu} from '../Restaurant/RestaurantMenu/index'
+import {ExpandableList} from "../../Components/ExpandableList";
+import {MenuList} from '../Restaurant/RestaurantMenu/List'
+
+
 import { DrawerNavigator, StackNavigator } from "react-navigation";
 
 
 
 const DrawerRouter = DrawerNavigator(
   {
-    HomeScreen: { screen: HomeScreen },
+    Home: { screen: HomeScreen },
     Chat: { screen: MainScreenNavigator },
     ProfileScreen: { screen: ProfileScreen },
+
   },
   {
     drawerPosition: 'right',
@@ -35,9 +41,7 @@ const HomeButtons = StackNavigator(
 );
 
 
-
-
-export const HomeScreenRouter = StackNavigator({
+const HomeScreenRouter = StackNavigator({
   Drawer: {
     screen: DrawerRouter,
     navigationOptions: {
@@ -73,6 +77,9 @@ export const HomeScreenRouter = StackNavigator({
        headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
   },
 
+  RestaurantMenu: {screen:RestaurantMenu},
+  ExpandableList: {screen:ExpandableList},
+  MenuList: {screen:MenuList},
   HomeScreen: {screen: HomeScreen},
 
   Dish: {screen: Dish,

@@ -12,21 +12,15 @@ import HomeScreen from '../../HomeScreen/HomeScreen'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 
-export const MenuRouter = StackNavigator(
-  {
-    HomeScreen: { screen: HomeScreen },
-  },
-  {
-    initialRouteName: 'HomeScreen',
-  }
-);
+export class MenuList extends PureComponent {
 
-
-export class List extends PureComponent {
 
   constructor(props) {
-    super(props);
+    super(props);    
+
   }
+
+
 
   _renderGroupHeader({item, groupId, status, toggleStatus}) {
     return (
@@ -46,7 +40,7 @@ export class List extends PureComponent {
   _renderGroupListItem({item, groupId, rowId}) {
     return (
       <View style={styles.listItemContainer} >
-       <TouchableOpacity onPress={() => this.props.navigation.navigate("HomeScreen")}>
+       <TouchableOpacity onPress={() => x.navigate("Dish")}>
         <Text style={styles.listItemText}>{item}</Text>
         </TouchableOpacity>
       </View>
@@ -54,15 +48,13 @@ export class List extends PureComponent {
   }
 
   render() {
-
-    <Button onPress={() => navigation.navigate("HomeScreen")}>
-<Text style={styles.listItemText}>Teeeest</Text>
-</Button>
-
+    const {toDish} = this.props;
+    global.x = toDish;
     const {data = []} = this.props;
 
     return (
       <View style={styles.container}>
+
         <ExpandableList
           data={data}
           groupStyle={styles.groupItem}
