@@ -68,6 +68,17 @@ decrement(){
 
           <Card>
             <CardItem>
+              <Left/>
+              <Right>
+              <Text style={{fontWeight:'bold'}}>ملاحظات</Text>
+              </Right>
+            </CardItem>
+
+            <Item inlineLabel last><Input placeholder='أدخل ملاحظاتك' style={{textAlign :'right', marginRight: 10}}/></Item>
+          </Card>
+
+          <Card>
+            <CardItem>
 
               <Left>
             <CardItem>
@@ -109,20 +120,20 @@ decrement(){
               
 
             </CardItem>
-          </Card>
 
-          <Card>
             <CardItem>
-              <Left/>
-              <Right>
-              <Text style={{fontWeight:'bold'}}>ملاحظات</Text>
-              </Right>
+            <Body>
+            <Button
+             warning
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4, marginBottom: 8}}
+            onPress={() => this.props.navigation.navigate("")}>
+            <Text>إضافة إلى الطلب</Text>
+             </Button>
+             </Body>
             </CardItem>
-
-            <Item inlineLabel last><Input placeholder='أدخل ملاحظاتك' style={{textAlign :'right', marginRight: 10}}/></Item>
-           
-            
           </Card>
+
+          
           
         </Content>
         </ImageBackground>
