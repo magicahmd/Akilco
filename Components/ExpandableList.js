@@ -51,6 +51,7 @@ export class ExpandableList extends Component {
     return new Array(data.length)
       .fill(false)
       .map((item, index) => {
+        alert(data[0].menuName);
         return initialOpenGroups.indexOf(index) !== -1;
       });
   }

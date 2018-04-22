@@ -5,6 +5,8 @@ import Expo from "expo";
 
 import {SimpleListPage} from './listexample/index'
 import HomeScreen from "./src/HomeScreen/index";
+import MapView from 'react-native-maps'
+
 export default class AwesomeApp extends Component {
   constructor() {
     super();

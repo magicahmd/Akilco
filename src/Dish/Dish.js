@@ -5,13 +5,43 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class Dish extends React.Component {
 
-  constructor(props){
+  /*constructor(props){
     super(props);
     this.state={
        count:1,
        itemPrice:30,
        totalPrice: 30,
     }
+  }*/
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      id: this.props.navigation.state.params.id,
+      count:1,
+      itemPrice:0,
+      totalPrice: 0,
+
+    }
+  }
+
+  getdata() {
+    return fetch('http://10.0.0.7/Server/public/api/dish/'+this.state.id)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ data: responseJson[0], itemPrice: responseJson[0].dishPrice, totalPrice: responseJson[0].dishPrice, isLoading:false });
+        
+        
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  componentWillMount() {
+
+    this.getdata();
   }
 
 increment(){
@@ -35,6 +65,23 @@ decrement(){
     
 
   render() {
+
+    if(this.state.isLoading){
+      return(
+          <Container>
+      <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
+      
+        <Content>
+        <Image source={require('../images/loading-icon.gif')} style={{alignSelf:'center', marginTop:12, marginBottom:8}}/>
+       
+        </Content>
+      </ImageBackground>
+    </Container>
+
+      )
+  }
+
+    dishData = this.state.data;
     
     return (
       <Container>
@@ -50,7 +97,7 @@ decrement(){
               </Left>
 
               <Right>
-                <Text style={{fontWeight:'bold'}}>اسم الطبق</Text>
+                <Text style={{fontWeight:'bold'}}>{dishData.dishName}</Text>
               </Right>
              
             </CardItem>

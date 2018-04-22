@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, Image, StyleSheet, ImageBackground } from "react-native";
+import { StatusBar, Image, StyleSheet, ImageBackground, View, FlatList } from "react-native";
 import {
   Button,
   Text,
@@ -18,7 +18,6 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export default class HomeScreen extends React.Component {
-
   
   static navigationOptions = {
     title: 'Home',
@@ -55,11 +54,11 @@ export default class HomeScreen extends React.Component {
         <Content style={styles.HomeContent}>
 
         <Image source={require('../images/Akilcologo.png')} style={{width: 200, height: 174,alignSelf:'center', marginTop:12, marginBottom:8}}/>
-
-        <Button
+        
+          <Button
             danger
             style={{alignSelf:'center',justifyContent:'center' ,width:180, marginTop: 10}}
-            onPress={() => this.props.navigation.navigate("RestaurantsList")}
+            onPress={() => this.props.navigation.navigate("RestaurantsList", {id:'hey'})}
           >
             <Text>Restaurants</Text>
           </Button>

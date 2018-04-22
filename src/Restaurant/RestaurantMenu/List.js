@@ -14,7 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 export class MenuList extends PureComponent {
 
-
+  
   constructor(props) {
     super(props);    
 
@@ -25,7 +25,7 @@ export class MenuList extends PureComponent {
   _renderGroupHeader({item, groupId, status, toggleStatus}) {
     return (
       <View style={styles.headContainer}>
-        <Text style={[styles.headTitleText, status && styles.headChosenTitleText]}>{item.title}</Text>
+        <Text style={[styles.headTitleText, status && styles.headChosenTitleText]}>{item['menuName']}</Text>
         <TouchableOpacity onPress={() => toggleStatus(false)}>
           <View style={styles.touchArea}>
             <Text style={{color: status ? '#333' : '#333'}}>{status ? 
@@ -52,11 +52,15 @@ export class MenuList extends PureComponent {
     global.x = toDish;
     const {data = []} = this.props;
 
+    global.Menu=this.props.data;
+    global.i=0;
+
+
     return (
       <View style={styles.container}>
 
         <ExpandableList
-          data={data}
+          data={Menu}
           groupStyle={styles.groupItem}
           renderGroupHeader={this._renderGroupHeader}
           renderGroupListItem={this._renderGroupListItem}
@@ -112,5 +116,11 @@ const styles = StyleSheet.create({
   listItemText: {
     marginLeft: 12,
     color: 'black'
-  }
+  },
+  
+  listItemContainer: {
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#DDD'
+  },
+  
 });

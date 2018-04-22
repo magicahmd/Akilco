@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, ScrollView, View,Image } from 'react-native';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Button, Icon} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import RestaurantsListData from './RestaurantListData'
 
  let logos = {
   pizzaHut: require('../images/pizza-hut.jpg'),
@@ -10,7 +9,7 @@ import RestaurantsListData from './RestaurantListData'
 }
 
 
-export default class RestaurantsList extends Component {
+export default class TablesList extends Component {
 
   constructor(props) {
     super(props)
@@ -24,7 +23,7 @@ export default class RestaurantsList extends Component {
   }
 
   getdata() {
-    return fetch('http://10.0.0.7/Server/public/api/ResNames')
+    return fetch('http://10.0.0.7/Server/public/api/allTables')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ data: responseJson, isLoading:false });
@@ -52,10 +51,10 @@ export default class RestaurantsList extends Component {
     return restaurants.map((item) => {
         return (
           
-            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("RestaurantProfile",{id:item.resId})}>
+            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("RestaurantProfile",{id:'item.resId'})}>
                 <Thumbnail square size={80} source={logos[item.resLogo]} />
                 <Body>
-                  <Text style={{ fontWeight: 'bold' }}>{item.resName}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>Table No: {item.tableName}</Text>
                   <Text note style={{ color: 'green' }}>{this.state.id}</Text>
                 </Body>
               </ListItem>
