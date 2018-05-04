@@ -17,6 +17,16 @@ import ReserveTable from '../Tables/ReserveTable'
 import SitOnTable from '../Tables/SitOnTable'
 import TablesList from '../Tables/TablesList'
 
+import ManagerHome from '../Manager/ManagerHome'
+import AddNewList from '../Manager/AddNewList'
+import AddDish from '../Dish/AddDish'
+import EditDishList from "../Dish/EditDishList";
+import WorkerList from "../Worker/WorkerList"
+import ManagerRequests from "../Manager/ManagerRequests"
+import ManageTables from "../Manager/ManageTables"
+import EditTable from "../Manager/EditTable"
+
+
 
 import { DrawerNavigator, StackNavigator } from "react-navigation";
 import { Tab } from "native-base";
@@ -116,6 +126,78 @@ const HomeScreenRouter = StackNavigator({
       headerTintColor: 'white',
       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
   },
+
+  EditDishList: {screen: EditDishList,
+    navigationOptions: {
+      headerTintColor: 'white',
+      headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  ManagerHome: 
+  {  screen: ManagerHome,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  AddNewList: 
+  {  screen: AddNewList,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  AddDish: 
+  {  screen: AddDish,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+ WorkerList: 
+  {  screen: WorkerList,
+   
+    
+     navigationOptions: {
+      title: 'Workers List',
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  ManagerRequests: 
+  {  screen: ManagerRequests,
+   
+    
+     navigationOptions: {
+      title: 'Requests',
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  ManageTables: 
+  {  screen: ManageTables,
+   
+    
+     navigationOptions: {
+      title: 'Tables',
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  EditTable: 
+  {  screen: EditTable,
+   
+    
+     navigationOptions: {
+      title: '',
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  
 
 
   

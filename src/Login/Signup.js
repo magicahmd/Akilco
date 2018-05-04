@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, Image, StyleSheet, ImageBackground, View} from "react-native";
+import { StatusBar, Image, StyleSheet, ImageBackground, View,AsyncStorage} from "react-native";
 import {
   Button,
   Text,
@@ -20,8 +20,93 @@ import {
 } from "native-base";
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import URL from '../URLs'
 
 export default class HomeScreen extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      email: "",
+      password: "",
+      confirm_password:"",
+      name: "",
+      phone_no: "",
+
+    }
+  }
+
+  ValidateEmail() {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email)) {
+      return (true)
+    }
+    return (false)
+  }
+
+  check_signup_validation(){
+    if (this.state.name == '')
+    alert('Please enter your name');
+  else if (this.state.email == '')
+    alert('Please enter your email');
+  else if(!this.ValidateEmail())
+  alert("You have entered an invalid email address!")
+  else if (this.state.phone_no == '')
+  alert('Please enter your phone number');
+  else if (this.state.phone_no.length<7)
+  alert('Please enter a right phone number');
+  else if (this.state.password == '')
+    alert('Please enter your password');
+    else if (this.state.confirm_password == '')
+    alert('Please confirm your password');
+    else if(this.state.password!=this.state.confirm_password)
+    alert("The two passwords don't match")
+    else
+    this.check_register();
+  }
+
+  check_register(){
+    url = URL.sign_up();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: this.state.email,
+        name: this.state.name,
+        phone_no:this.state.phone_no,
+        password:this.state.password,
+      })
+    }).then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({ data: responseJson});
+
+      if(this.state.data.length==0){
+        alert('this email is already exists.');
+      }
+      else{
+        this.assign_user();
+      }
+
+    });
+
+  }
+
+  assign_user(){
+    user = {
+      userId: this.state.data.id,
+      userName: this.state.data.name,
+      iSManager: false,
+      isWaiter: false,
+    }
+
+    AsyncStorage.setItem('USER', JSON.stringify(user));
+    this.props.navigation.navigate("Drawer");
+   //this.props.navigation.goBack(this.forceUpdate());
+    
+  }
 
   render() {
     return (
@@ -33,33 +118,29 @@ export default class HomeScreen extends React.Component {
         <View >
         <Form style={styles.signForm}>
             <Item>
-            <Input placeholder='User Name' />
+            <Input placeholder='Name' onChangeText={(name) => this.setState({ name })}/>
             </Item>
 
             <Item>
-            <Input placeholder='Full Name' />
+            <Input placeholder='Email Address' onChangeText={(email) => this.setState({ email })} />
             </Item>
 
             <Item>
-            <Input placeholder='Email Address' />
+            <Input keyboardType='numeric' placeholder='Phone Number' onChangeText={(phone_no) => this.setState({ phone_no })} />
             </Item>
 
             <Item>
-            <Input placeholder='Phone Number' />
-            </Item>
-
-            <Item>
-              <Input placeholder='Password' secureTextEntry={true} />
+              <Input placeholder='Password' secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
             </Item>
             
             <Item>
-              <Input placeholder='Confirm Password' secureTextEntry={true} />
+              <Input placeholder='Confirm Password' secureTextEntry={true} onChangeText={(confirm_password) => this.setState({ confirm_password })} />
             </Item>
 
             <Button
             danger
             style={{alignSelf:'center',justifyContent:'center' ,width:180, marginTop: 20, marginBottom:20}}
-            onPress={() => this.props.navigation.navigate("RestaurantsList")}
+            onPress={() => this.check_signup_validation()}
           >
             <Text>Sign Up</Text>
           </Button>

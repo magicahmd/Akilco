@@ -1,6 +1,6 @@
 var api = {
     getRestaurants(){
-        var url = 'http://localhost/api/ResNames';
+        var url = 'http://10.0.0.7/api/ResNames';
         return fetch(url).then((res) => res.json());
     }
 };

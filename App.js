@@ -3,15 +3,18 @@ import { View } from "react-native";
 import { Container, Content, Picker, Button, Text } from "native-base";
 import Expo from "expo";
 
+
 import {SimpleListPage} from './listexample/index'
 import HomeScreen from "./src/HomeScreen/index";
 import MapView from 'react-native-maps'
+import Login from './src/Login/Login'
 
 export default class AwesomeApp extends Component {
   constructor() {
     super();
     this.state = {
-      isReady: false
+      isReady: false,
+      isloggedIn: false,
     };
   }
   async componentWillMount() {
@@ -26,6 +29,9 @@ export default class AwesomeApp extends Component {
     if (!this.state.isReady) {
       return <Expo.AppLoading />;
     }
-    return <HomeScreen />;
+
+   return <HomeScreen/>
+
+    
   }
 }

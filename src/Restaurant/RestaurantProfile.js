@@ -21,9 +21,11 @@ import {
   LayoutAnimation
 } from "native-base";
 
+import URL from '../URLs'
+
 let logos = {
   1: require('../images/pizza-hut-image.jpg'),
-  3:  require('../images/kfc-image.png'),
+  2: require('../images/kfc-image.png'),
 }
 
 
@@ -50,7 +52,8 @@ export default class RestaurantProfile extends React.Component {
   }
 
   getdata() {
-    return fetch('http://10.0.0.7/Server/public/api/resMenus/'+this.state.id)
+    url = URL.getRestaurantMenu(this.state.id);
+    return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ data: responseJson, isLoading:false });
@@ -99,7 +102,7 @@ export default class RestaurantProfile extends React.Component {
           <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("DishesList", { id: item.id })}>
           <Thumbnail square size={60} source={ require('../images/MenuLogo.png')} />
             <Body>
-              <Text style={{ fontWeight: 'bold' }}>{item.menuName}</Text>
+              <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
             </Body>
           </ListItem>
         );
@@ -135,9 +138,6 @@ export default class RestaurantProfile extends React.Component {
                 <Localimage source={logos[this.state.id]} originalWidth={1024} originalHeight={576} />
               </Content>
             </Content>
-
-            <Image source={require('../images/table.png')} style={{width: 120, height: 120,alignSelf:'center', marginBottom:8}}/>
-
 
             <Content style={styles.TableReservation}>
               <Card>
@@ -210,7 +210,7 @@ export default class RestaurantProfile extends React.Component {
             {/*<MenuList data={this.data} toDish={this.toDish}/>*/}
 
 
-           <Image source={require('../images/Menu.png')} style={{width: 120, height: 120,alignSelf:'center', marginBottom:8}}/>
+           <Image source={require('../images/menu.png')} style={{width: 100, height: 100,alignSelf:'center', marginBottom:8}}/>
             <View style={{ backgroundColor: 'white',}}>
 
               <List>

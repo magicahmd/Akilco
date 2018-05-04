@@ -8,10 +8,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
   kfc:  require('../images/kfc-logo.png'),
 }
 
-import URL from '../URLs'
 
-
-export default class TablesList extends Component {
+export default class ManageTables extends Component {
 
   constructor(props) {
     super(props)
@@ -25,8 +23,7 @@ export default class TablesList extends Component {
   }
 
   getdata() {
-    url = URL.getRestaurantTables(this.state.id);
-    return fetch(url)
+    return fetch('http://10.0.0.7/Server/public/api/allTables')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ data: responseJson, isLoading:false });
@@ -54,11 +51,11 @@ export default class TablesList extends Component {
     return restaurants.map((item) => {
         return (
           
-            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("ReserveTable",{id:item.id})}>
+            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("EditTable",{id:item.tableId})}>
                 <Thumbnail square size={80} source={require('../images/table-icon.png')} />
                 <Body>
-                  <Text style={{ fontWeight: 'bold' }}>Table No: {item.name}</Text>
-                  <Text note style={{ color: 'green' }}>Seats No: {item.seats_no}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>Table No: {item.tableName}</Text>
+                  <Text note style={{ color: 'green' }}>Waiter:</Text>
                 </Body>
               </ListItem>
         );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, ScrollView, View,Image } from 'react-native';
+import { ImageBackground, StyleSheet, ScrollView, View,Image, TouchableOpacity } from 'react-native';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Button, Icon} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
@@ -8,25 +8,22 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
   kfc:  require('../images/kfc-logo.png'),
 }
 
-import URL from '../URLs'
 
-
-export default class TablesList extends Component {
+export default class ManagerRequests extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       data: [],
-      id: this.props.navigation.state.params.id,
       isLoading: true,
+      checked:0,
       
     }
     
   }
 
   getdata() {
-    url = URL.getRestaurantTables(this.state.id);
-    return fetch(url)
+    return fetch('http://10.0.0.7/Server/public/api/ResNames')
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({ data: responseJson, isLoading:false });
@@ -39,6 +36,7 @@ export default class TablesList extends Component {
 
   componentWillMount() {
     this.getdata();
+    console.log('Hey, This application sucks.')
   }
 
   static navigationOptions = {
@@ -48,22 +46,42 @@ export default class TablesList extends Component {
   }
 
 
-  renderButtons() {
+  renderWaiters() {
     
  
     return restaurants.map((item) => {
         return (
           
-            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("ReserveTable",{id:item.id})}>
-                <Thumbnail square size={80} source={require('../images/table-icon.png')} />
+            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("RestaurantProfile",{id:item.resId})}>
+                <Thumbnail square size={80} source={logos[item.resLogo]} />
                 <Body>
-                  <Text style={{ fontWeight: 'bold' }}>Table No: {item.name}</Text>
-                  <Text note style={{ color: 'green' }}>Seats No: {item.seats_no}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>{item.resName}</Text>
+                  <Text note style={{ color: 'green' }}>{this.state.id}</Text>
                 </Body>
               </ListItem>
+
         );
     });
 }
+
+renderChefs() {
+    
+ 
+    return restaurants.map((item) => {
+        return (
+          
+            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("RestaurantProfile",{id:item.resId})}>
+                <Thumbnail square size={80} source={logos[item.resLogo]} />
+                <Body>
+                  <Text style={{ fontWeight: 'bold' }}>{item.resName}</Text>
+                  <Text note style={{ color: 'green' }}>{this.state.id}</Text>
+                </Body>
+              </ListItem>
+
+        );
+    });
+}
+
 
 
   render() {
@@ -94,10 +112,17 @@ export default class TablesList extends Component {
           
           
             <List >
-              
-            {this.renderButtons()}
+            <ListItem itemDivider>
+              <Text>Table Reservations</Text>
+            </ListItem>   
+            {this.renderWaiters()}
 
+            <ListItem itemDivider>
+              <Text>Take away orders</Text>
+            </ListItem> 
+            {this.renderChefs()}
             </List>
+
           </View>
           </Content>
         </ImageBackground>

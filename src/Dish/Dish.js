@@ -19,19 +19,20 @@ export default class Dish extends React.Component {
     this.state = {
       data: [],
       id: this.props.navigation.state.params.id,
+      name: this.props.navigation.state.params.name,
       count:1,
-      itemPrice:0,
+      itemPrice:10,
       totalPrice: 0,
+      checked: 0,
 
     }
   }
 
   getdata() {
-    return fetch('http://10.0.0.7/Server/public/api/dish/'+this.state.id)
+    return fetch('http://10.0.0.7/Akilco/public/api/Dish/'+this.state.id+'/sizes')
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({ data: responseJson[0], itemPrice: responseJson[0].dishPrice, totalPrice: responseJson[0].dishPrice, isLoading:false });
-        
+        this.setState({ data: responseJson, itemPrice: responseJson[0].pivot.price, totalPrice: responseJson[0].pivot.price, isLoading:false });
         
       })
       .catch((error) => {
@@ -59,6 +60,31 @@ decrement(){
       totalPrice : (this.state.count-1) * this.state.itemPrice
     })
   }
+  
+}
+
+renderSizes(){
+  return dishData.map((item, key) => {
+
+    
+    return(
+
+<CardItem>
+{this.state.checked == key ?
+  <TouchableOpacity style={{ flexDirection: 'row' }}>
+    <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/filledButton.png')} />
+    <Text>{item.name} : ₪{item.pivot.price}</Text>
+  </TouchableOpacity>
+  :
+  <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ checked: key, itemPrice: dishData[key].pivot.price, totalPrice: dishData[key].pivot.price, count:1 });}}>
+    <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/unfilledButton.png')} />
+    <Text>{item.name} : ₪{item.pivot.price}</Text>
+  </TouchableOpacity>
+}
+</CardItem>
+      );
+  });
+ 
   
 }
       
@@ -93,14 +119,15 @@ decrement(){
             <CardItem>
 
               <Left>
-              <Text style={{fontSize:15, color:'black'}}>₪ {this.state.itemPrice}</Text>
+              <Text style={{fontWeight:'bold'}}>{this.state.name}</Text>
               </Left>
 
               <Right>
-                <Text style={{fontWeight:'bold'}}>{dishData.dishName}</Text>
+              <Text style={{fontSize:15, color:'black'}}>₪ {this.state.itemPrice}</Text>
               </Right>
              
             </CardItem>
+
 
             <CardItem>
 
@@ -112,6 +139,19 @@ decrement(){
               </Right>
             </CardItem>
           </Card>
+
+          <Card>
+            <CardItem>
+
+              <Left>
+              <Text style={{fontWeight:'bold'}}>Size:</Text>
+              </Left>
+
+            </CardItem>
+
+                        {this.renderSizes()}
+
+            </Card>
 
           <Card>
             <CardItem>

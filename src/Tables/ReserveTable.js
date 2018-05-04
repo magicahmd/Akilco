@@ -1,139 +1,176 @@
-import React, { Component } from 'react';
-import {
-  Alert,
-  Linking,
-  Dimensions,
-  LayoutAnimation,
-  Text,
-  View,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import { BarCodeScanner, Permissions } from 'expo';
+import React from "react";
+import { StatusBar, Image, StyleSheet, ImageBackground, TouchableOpacity, View, Alert } from "react-native";
+import { Button, Text, Container, Card, CardItem, Body, Content, Header, Title, Left, Icon, Right, Item, Input } from "native-base";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import DateTimePicker from 'react-native-modal-datetime-picker'
+import moment from 'moment'
+import URL from '../URLs'
 
-export default class ReserveTable extends Component {
-  state = {
-    hasCameraPermission: null,
-    lastScannedUrl: null,
-  };
 
-  componentDidMount() {
-    this._requestCameraPermission();
+export default class Dish extends React.Component {
+
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      id: this.props.navigation.state.params.id,
+      isReady: false,
+      pickedTime: '',
+
+    }
   }
 
-  _requestCameraPermission = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({
-      hasCameraPermission: status === 'granted',
-    });
+  state = {
+    isDateTimePickerVisible: false,
   };
 
-  _handleBarCodeRead = result => {
-    if (result.data !== this.state.lastScannedUrl) {
-      LayoutAnimation.spring();
-      this.setState({ lastScannedUrl: result.data });
-    }
+  _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
+
+  _hideDateTimePicker = (datetime) => this.setState({ 
+    isDateTimePickerVisible: false,
+
+   });
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    this.setState({
+      pickedTime: moment(date).format('hh:mm')
+    });
+    this._hideDateTimePicker();
   };
+
+  getdata() {
+    url = URL.getTable(this.state.id)
+    return fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ data: responseJson, isLoading: false });
+
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  componentWillMount() {
+
+    this.getdata();
+  }
 
   render() {
-    return (
-      <View style={styles.container}>
 
-        {this.state.hasCameraPermission === null
-          ? <Text>Requesting for camera permission</Text>
-          : this.state.hasCameraPermission === false
-              ? <Text style={{ color: '#fff' }}>
-                  Camera permission is not granted
-                </Text>
-              : <BarCodeScanner
-                  onBarCodeRead={this._handleBarCodeRead}
-                  style={{
-                    height: Dimensions.get('window').height,
-                    width: Dimensions.get('window').width,
-                  }}
-                />}
+    if (this.state.isLoading) {
+      return (
+        <Container>
+          <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
 
-        {this._maybeRenderUrl()}
+            <Content>
+              <Image source={require('../images/loading-icon.gif')} style={{ alignSelf: 'center', marginTop: 12, marginBottom: 8 }} />
 
-        <StatusBar hidden />
-      </View>
-    );
-  }
+            </Content>
+          </ImageBackground>
+        </Container>
 
-  _handlePressUrl = () => {
-    Alert.alert(
-      'Reserve this table ?',
-      this.state.lastScannedUrl,
-      [
-        {
-          text: 'Yes',
-          onPress: () => this.props.navigation.goBack(null),
-        },
-        { text: 'No', onPress: () => {} },
-      ],
-      { cancellable: false }
-    );
-  };
-
-  _handlePressCancel = () => {
-    this.setState({ lastScannedUrl: null });
-  };
-
-  _maybeRenderUrl = () => {
-    if (!this.state.lastScannedUrl) {
-      return;
+      )
     }
 
+    TableData = this.state.data;
+
     return (
-      <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.url} onPress={this._handlePressUrl}>
-          <Text numberOfLines={1} style={styles.urlText}>
-            {this.state.lastScannedUrl}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.cancelButton}
-          onPress={this._handlePressCancel}>
-          <Text style={styles.cancelButtonText}>
-            Cancel
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Container>
+        <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
+
+          <Content padder>
+
+            <Card>
+              <CardItem>
+
+                <Left>
+                  <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>{TableData.name}</Text>
+                </Left>
+
+                <Right>
+                  <Text>رقم الطاولة</Text>
+                </Right>
+
+              </CardItem>
+
+              <CardItem>
+
+                <Left>
+                  <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>{TableData.seats_no}</Text>
+                </Left>
+
+                <Right>
+                  <Text>عدد المقاعد</Text>
+                </Right>
+
+              </CardItem>
+
+            </Card>
+
+            <Card>
+
+              <CardItem>
+
+                <Left>
+                  <Text style={{ fontSize: 15, color: 'black', fontWeight: 'bold' }}>{this.state.pickedTime}</Text>
+                </Left>
+
+                <Right>
+                <TouchableOpacity onPress={this._showDateTimePicker}>
+                    <Text>اختيار الوقت</Text>
+                  </TouchableOpacity>
+                  <DateTimePicker
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onConfirm={this._handleDatePicked}
+                    onCancel={this._hideDateTimePicker}
+                    mode='time'
+                  />
+                </Right>
+
+              </CardItem>
+
+              <CardItem>
+                <Right>
+                  
+                </Right>
+              </CardItem>
+
+
+
+
+              <CardItem>
+                <Body>
+                  <Button
+                    warning
+                    style={{ alignSelf: 'center', justifyContent: 'center', width: 200, marginBottom: 8 }}
+                    onPress={() => this.props.navigation.navigate("")}>
+                    <Text>إرسال حجز الطاولة</Text>
+                  </Button>
+                </Body>
+              </CardItem>
+            </Card>
+
+
+
+          </Content>
+        </ImageBackground>
+      </Container>
     );
-  };
+  }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#000',
+  HomeContent: {
+    marginTop: 70,
+    marginLeft: 8,
+    marginRight: 8,
+    minHeight: 200,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 6,
   },
-  bottomBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 15,
-    flexDirection: 'row',
-  },
-  url: {
-    flex: 1,
-  },
-  urlText: {
-    color: '#fff',
-    fontSize: 20,
-  },
-  cancelButton: {
-    marginLeft: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cancelButtonText: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 18,
-  },
+
 });

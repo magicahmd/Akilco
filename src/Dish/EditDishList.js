@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, ScrollView, View,Image } from 'react-native';
+import { ImageBackground, StyleSheet, ScrollView, View,Image , Alert} from 'react-native';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Button, Icon } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import URL from '../URLs'
@@ -56,7 +56,29 @@ export default class DishesList extends Component {
         });
     }
 
+delete_list(){
+  url = URL.delete_List(this.state.id);
+    fetch(url, {
+      method: 'Delete',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }).then((response) =>       this.props.navigation.navigate("Drawer") )
 
+}
+
+delete_button(){
+  Alert.alert(
+    'Delete this list',
+    'Are you sure ?',
+    [
+      {text: 'Yes', onPress: () => this.delete_list()},
+      {text: 'No', onPress: () => console.log('No')},
+    ],
+    { cancelable: false }
+  )
+}
 
 
   render() {
@@ -82,8 +104,25 @@ export default class DishesList extends Component {
       <Container>
         <ImageBackground source={images['background']} style={{ flex: 1, width: '100%', height: '100%' }}>
         
+        <Button
+            warning
+            style={{ alignSelf: 'center', justifyContent: 'center', width: 300, marginTop: 4 }}
+            onPress={() => this.props.navigation.navigate("AddDish")}
+          >
+            <Text>Add New Dish</Text>
+          </Button>
+
+          <Button
+            danger
+            style={{ alignSelf: 'center', justifyContent: 'center', width: 300, marginTop: 4, marginBottom:4 }}
+            onPress={()=>this.delete_button()}
+          >
+            <Text>Delete the list</Text>
+          </Button>
+          
           <Content>
-          <View style={{ backgroundColor: 'white' }}>          
+          <View style={{ backgroundColor: 'white' }}>    
+                
           
             <List >
               
