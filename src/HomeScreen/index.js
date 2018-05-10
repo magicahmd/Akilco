@@ -19,12 +19,16 @@ import TablesList from '../Tables/TablesList'
 
 import ManagerHome from '../Manager/ManagerHome'
 import AddNewList from '../Manager/AddNewList'
+import AddNewTable from '../Manager/AddNewTable'
 import AddDish from '../Dish/AddDish'
 import EditDishList from "../Dish/EditDishList";
 import WorkerList from "../Worker/WorkerList"
 import ManagerRequests from "../Manager/ManagerRequests"
 import ManageTables from "../Manager/ManageTables"
 import EditTable from "../Manager/EditTable"
+
+import PreOrder from '../Order/PreOreder'
+import EditPreOrder from '../Order/EditPreOrder'
 
 
 
@@ -91,6 +95,22 @@ const HomeScreenRouter = StackNavigator({
        headerTintColor: 'white',
        headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
   },
+
+  PreOrder: 
+  {  screen: PreOrder,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  EditPreOrder:
+  {  screen: EditPreOrder,
+    
+    navigationOptions: {
+      headerTintColor: 'white',
+      headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+ },
   
   RestaurantMenu: {screen:RestaurantMenu},
   ExpandableList: {screen:ExpandableList},
@@ -143,6 +163,14 @@ const HomeScreenRouter = StackNavigator({
 
   AddNewList: 
   {  screen: AddNewList,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  AddNewTable: 
+  {  screen: AddNewTable,
     
      navigationOptions: {
        headerTintColor: 'white',

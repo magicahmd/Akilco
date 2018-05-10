@@ -1,190 +1,254 @@
 import React from "react";
-import { StatusBar, Image, StyleSheet, ImageBackground, TouchableOpacity, View, Alert } from "react-native";
-import { Button, Text, Container, Card, CardItem, Body, Content, Header, Title, Left, Icon, Right, Item, Input, Form, Label } from "native-base";
+import { StatusBar, Image, StyleSheet, ImageBackground,TouchableOpacity,View,Alert } from "react-native";
+import {Button,Text,Container,Card,CardItem,Body,Content,Header,Title,Left,Icon,Right,Item,Input} from "native-base";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import DateTimePicker from 'react-native-modal-datetime-picker'
-import moment from 'moment'
 
+import URL from '../URLs'
 
-export default class EditTable extends React.Component {
+export default class EditPreOrder extends React.Component {
 
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            data: [],
-            id: this.props.navigation.state.params.id,
-            isReady: false,
-            pickedTime: '',
-            checked:0,
-
-        }
+  /*constructor(props){
+    super(props);
+    this.state={
+       count:1,
+       itemPrice:30,
+       totalPrice: 30,
     }
+  }*/
 
-    state = {
-        isDateTimePickerVisible: false,
-    };
-
-    _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
-
-    _hideDateTimePicker = (datetime) => this.setState({
-        isDateTimePickerVisible: false,
-
-    });
-
-    _handleDatePicked = (date) => {
-        console.log('A date has been picked: ', date);
-        this.setState({
-            pickedTime: moment(date).format('hh:mm')
-        });
-        this._hideDateTimePicker();
-    };
-
-    getdata() {
-        return fetch('http://10.0.0.7/Server/public/api/allTables')
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ data: responseJson[0]});
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      waiters:[],
+      id: this.props.navigation.state.params.id,
+      restaurant_id: this.props.navigation.state.params.restaurant_id,
+      checked: 0,
+      assigned_waiter: null,
 
 
-            })
-            .catch((error) => {
-                console.error(error);
-            });
     }
+  }
 
-    getWaitersData() {
-        return fetch('http://10.0.0.7/Server/public/api/ResNames')
-          .then((response) => response.json())
-          .then((responseJson) => {
-            this.setState({ WaitersData: responseJson, isLoading:false });
-            
-          })
-          .catch((error) => {
+  getdata() {
+    url = URL.getTable(this.state.id)
+    return fetch(url)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            this.setState({ data: responseJson });
+        })
+        .catch((error) => {
             console.error(error);
-          });
-      }
-
-    componentWillMount() {
-
-        this.getdata();
-        this.getWaitersData();
-    }
-
-    renderWaiters() 
-    {   
-        if(WaitersData!=null){
-            return this.state.WaitersData.map((item,key) => {
-        return (
-          <View style={{marginLeft:10}}>
-            {this.state.checked==key?
-          <TouchableOpacity style={{flexDirection:'row'}}>
-                            <Image style={{width:25,height:25}} source={require('../images/filledButton.png')} />
-                            <Text>checked</Text>
-            </TouchableOpacity>
-            :
-            <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>{this.setState({checked:key})}}>
-              <Image style={{width:25,height:25}} source={require('../images/unfilledButton.png')} />
-              <Text>unchecked</Text>
-              </TouchableOpacity>  
-          }
-            
-            </View>
-          
-        );
-    });
+        });
 }
- else return(<View></View>)   
- 
-     
-      }
+
+getRestaurantWaiters(){
+    url = URL.getRestaurantWaiters(this.state.restaurant_id);
+    return fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({ waiters: responseJson, isLoading:false });
+
+        if(this.state.waiters!=null){
+          this.state.assigned_waiter = this.state.waiters[0].id;
+        }
+       
       
 
-    render() {
 
-        if (this.state.isLoading) {
-            return (
-                <Container>
-                    <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
-                        <Content>
-                            <Image source={require('../images/loading-icon.gif')} style={{ alignSelf: 'center', marginTop: 12, marginBottom: 8 }} />
-
-                        </Content>
-                    </ImageBackground>
-                </Container>
-
-            )
+  renderWaiters(){
+    return waiters.map((item, key) => {
+      
+      return(
+  
+        <CardItem>
+        {this.state.checked == key ?
+          <TouchableOpacity style={{ flexDirection: 'row' }}>
+            <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/filledButton.png')} />
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+          :
+          <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ checked: key, assigned_waiter: item.id });}}>
+            <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/unfilledButton.png')} />
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
         }
+        </CardItem>
 
-       else{
-        TableData = this.state.data;
-        WaitersData = this.state.WaitersData;
-
-        return (
-            <Container>
-                <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
-
-                    <Content padder>
-
-                        <Form style={styles.signForm}>
-                            <Item floatingLabel>
-                                <Label>Table No</Label>
-                                <Input value={TableData.tableName} />
-                            </Item>
-
-                            <Text>{TableData.seatNo}</Text>
-                            
-                            <Item floatingLabel>
-                                <Label>Seats No</Label>
-                                <Input value={TableData.seatNo} />
-                            </Item>
-
-                            {this.renderWaiters()}
-
-
-                            <Button
-                                warning
-                                style={{ alignSelf: 'center', justifyContent: 'center', width: 180, marginTop: 20, marginBottom: 20 }}
-                                onPress={() => this.props.navigation.navigate("")}
-                            >
-                                <Text>Update</Text>
-                            </Button>
-
-                        </Form>
-
-
-
-
-
-                    </Content>
-                </ImageBackground>
-            </Container>
         );
+    });
+   
+    
+  }
 
-       }
+  update(){
+      url = URL.assign_waiter(this.state.id);
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          worker_id: this.state.assigned_waiter,
+        }),
+      });
+      
+        alert('The table has been edited.');
+        this.props.navigation.goBack('');
+  }
 
-
-        
+  delete_table(){
+    url = URL.delete_table(this.state.id);
+      fetch(url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    
+      alert('The table has been deleted.');
+      this.props.navigation.goBack('');
+    
     }
+
+  componentWillMount() {
+    
+  this.getdata();
+  this.getRestaurantWaiters();
+
+  }
+
+      
+    
+
+  render() {
+
+    waiters = this.state.waiters;
+
+    if(this.state.isLoading){
+      return(
+          <Container>
+      <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
+      
+        <Content>
+        <Image source={require('../images/loading-icon.gif')} style={{alignSelf:'center', marginTop:12, marginBottom:8}}/>
+       
+        </Content>
+      </ImageBackground>
+    </Container>
+
+      )
+  }    
+    return (
+      <Container>
+         <ImageBackground source={require('../images/background2.jpg')}  style={{flex:1,width:'100%',height:'100%'}}>
+
+        <Content padder>
+
+        <Card>
+            <CardItem>
+
+              <Left>
+              <Text style={{fontWeight:'bold'}}>Table No: </Text>
+              </Left>
+
+              <Right>
+              <Text style={{fontSize:15, color:'black'}}>{this.state.data.name}</Text>
+              </Right>
+             
+            </CardItem>
+
+          </Card>
+
+          <Card>
+            <CardItem>
+
+              <Left>
+              <Text style={{fontWeight:'bold'}}>Seats No: </Text>
+              </Left>
+
+              <Right>
+              <Text style={{fontSize:15, color:'black'}}>{this.state.data.seats_no}</Text>
+              </Right>
+             
+            </CardItem>
+                    
+
+            </Card>
+
+          <Card>
+
+
+            <CardItem>
+            <Body>
+
+            <CardItem>
+
+              <Left>
+              <Text style={{fontWeight:'bold'}}>Waiters:</Text>
+              </Left>
+
+            </CardItem>
+            
+             {this.renderWaiters()}
+
+
+             
+                
+            <Button
+             warning
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4}}
+            onPress={() => this.update()}>
+            <Text>Update</Text>
+             </Button>
+
+              <Button
+             warning
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4}}
+            onPress={() =>{
+              this.state.assigned_waiter=null;
+              this.update();
+            }}>
+            <Text>No waiter</Text>
+             </Button>
+
+             <Button
+             danger
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4}}
+            onPress={() => this.delete_table()}>
+            <Text>Delete this table.</Text>
+             </Button>
+
+           
+             </Body>
+            </CardItem>
+          </Card>
+
+          
+          
+        </Content>
+        </ImageBackground>
+      </Container>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    HomeContent: {
-        marginTop: 70,
-        marginLeft: 8,
-        marginRight: 8,
-        minHeight: 200,
-        backgroundColor: 'rgba(255, 255, 255, 0.5)',
-        borderRadius: 6,
-    },
-
-    signForm: {
-        marginTop: 10,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        borderRadius: 6,
-        borderWidth: 0.5,
-        borderColor: 'rgba(0, 0, 0, 0.3)',
-    }
+  HomeContent:{
+    marginTop: 70,
+    marginLeft: 8,
+    marginRight:8, 
+    minHeight: 200,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 6, 
+  },
 
 });

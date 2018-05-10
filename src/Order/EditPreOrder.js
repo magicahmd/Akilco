@@ -5,7 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import URL from '../URLs'
 
-export default class Dish extends React.Component {
+export default class EditPreOrder extends React.Component {
 
   /*constructor(props){
     super(props);
@@ -25,7 +25,7 @@ export default class Dish extends React.Component {
       restaurant_id: this.props.navigation.state.params.restaurant_id,
       name: this.props.navigation.state.params.name,
       dish_size: "",
-      notice: "",
+      note: "",
       count:1,
       itemPrice:0,
       totalPrice: 0,
@@ -35,12 +35,12 @@ export default class Dish extends React.Component {
   }
 
   getdata() {
-    url = URL.getDishSizes(this.state.id);
+    url = URL.show_preorder(this.state.id);
     return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({ data: responseJson, itemPrice: responseJson[0].pivot.price, totalPrice: responseJson[0].pivot.price, dish_size:responseJson[0].name, isLoading:false });
-        
+        this.setState({ data: responseJson, note:responseJson.note, itemPrice: responseJson.dish_price,count:responseJson.quantity, dish_size:responseJson.dish_size, totalPrice: responseJson.dish_price*responseJson.quantity, isLoading:false });
+      
       })
       .catch((error) => {
         console.error(error);
@@ -50,7 +50,7 @@ export default class Dish extends React.Component {
   componentWillMount() {
     
   this.getdata();
-
+  //alert(this.state.id);
   }
 
 increment(){
@@ -71,33 +71,11 @@ decrement(){
   
 }
 
-renderSizes(){
-  return dishData.map((item, key) => {
-    
-    return(
 
-<CardItem>
-{this.state.checked == key ?
-  <TouchableOpacity style={{ flexDirection: 'row' }}>
-    <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/filledButton.png')} />
-    <Text>{item.name} : ₪{item.pivot.price}</Text>
-  </TouchableOpacity>
-  :
-  <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => { this.setState({ checked: key, itemPrice: dishData[key].pivot.price, totalPrice: dishData[key].pivot.price, count:1, dish_size: item.name });}}>
-    <Image style={{ width: 25, height: 25, marginRight:6 }} source={require('../images/unfilledButton.png')} />
-    <Text>{item.name} : ₪{item.pivot.price}</Text>
-  </TouchableOpacity>
-}
-</CardItem>
-      );
-  });
- 
-  
-}
 
 
 add_preorder(){
-  url = URL.add_preorder();
+  url = URL.edit_preorder(this.state.id);
   fetch(url, {
   method: 'POST',
   headers: {
@@ -105,21 +83,30 @@ add_preorder(){
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    user_id: this.state.user_id,
-    restaurant_id: this.state.restaurant_id,
-    dish_id: this.state.id,
-    dish_name: this.state.name,
-    dish_size: this.state.dish_size,
-    dish_price: this.state.itemPrice,
     quantity: this.state.count,
-    note: this.state.notice,
+    note: this.state.note,
   }),
 });
 
-  alert('The dish has been added.');
-  this.props.navigation.goBack(null);
+  alert('The dish has been edited.');
+  this.props.navigation.goBack('');
 
 }
+
+delete_preorder(){
+  url = URL.delete_preorder(this.state.id);
+    fetch(url, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
+  
+    alert('The dish has been deleted.');
+    this.props.navigation.goBack('');
+  
+  }
       
     
 
@@ -152,7 +139,7 @@ add_preorder(){
             <CardItem>
 
               <Left>
-              <Text style={{fontWeight:'bold'}}>{this.state.name}</Text>
+              <Text style={{fontWeight:'bold'}}>{this.state.data.dish_name}</Text>
               </Left>
 
               <Right>
@@ -177,12 +164,12 @@ add_preorder(){
             <CardItem>
 
               <Left>
-              <Text style={{fontWeight:'bold'}}>Size:</Text>
+              <Text style={{fontWeight:'bold'}}>Size: {this.state.data.dish_size}</Text>
               </Left>
 
             </CardItem>
 
-                        {this.renderSizes()}
+                    
 
             </Card>
 
@@ -194,7 +181,7 @@ add_preorder(){
               </Right>
             </CardItem>
 
-            <Item inlineLabel last><Input   onChangeText={(notice) => this.setState({notice})} placeholder='أدخل ملاحظاتك' style={{textAlign :'right', marginRight: 10}}/></Item>
+            <Item inlineLabel last><Input  onChangeText={(note) => this.setState({note})} placeholder='أدخل ملاحظاتك' value={this.state.note} style={{textAlign :'right', marginRight: 10}}/></Item>
           </Card>
 
           <Card>
@@ -243,12 +230,22 @@ add_preorder(){
 
             <CardItem>
             <Body>
+                
             <Button
              warning
             style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4, marginBottom: 8}}
             onPress={() => this.add_preorder()}>
-            <Text>إضافة إلى الطلب</Text>
+            <Text>Edit your Pre-order</Text>
              </Button>
+
+             <Button
+             danger
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4}}
+            onPress={() => this.delete_preorder()}>
+            <Text>Delete this item.</Text>
+             </Button>
+
+           
              </Body>
             </CardItem>
           </Card>

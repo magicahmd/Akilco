@@ -5,7 +5,6 @@ import RestaurantMenu from "./RestaurantProfile"
 import RestaurantInfo from "./RestaurantInfo"
 import RestaurantOrders from "./restaurantOrders"
 import RestaurantTables from "./RestaurantTables"
-import PreOrder from "../Order/PreOreder"
 import {Localimage} from "../../Components/Localimage"
 
 
@@ -18,7 +17,6 @@ export default (MainScreenNavigator = TabNavigator(
       RestaurantMenu: { screen: props => <RestaurantMenu {...props} /> },
       RestaurantInfo: { screen: props => <RestaurantInfo {...props} /> },
       RestaurantOrders: { screen: props => <RestaurantOrders {...props} /> },
-      PreOrder: { screen: props => <PreOrder {...props} /> }
     },
     {
       tabBarPosition: "bottom",
@@ -50,14 +48,7 @@ export default (MainScreenNavigator = TabNavigator(
                 <MaterialIcons name="playlist-add-check" size={24}/>
                 <Text>Orders</Text>
               </Button>
-              <Button
-                vertical
-                active={props.navigationState.index === 3}
-                onPress={() => props.navigation.navigate("PreOrder")}
-              >
-                <MaterialIcons name="shopping-cart" size={24}/>
-                <Text>Tables</Text>
-              </Button>
+            
             </FooterTab>
           </Footer>
         );

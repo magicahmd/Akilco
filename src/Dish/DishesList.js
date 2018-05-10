@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, ScrollView, View,Image } from 'react-native';
+import { ImageBackground, StyleSheet, ScrollView, View,Image,AsyncStorage } from 'react-native';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Body, Left, Right, Button, Icon } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import URL from '../URLs'
@@ -16,6 +16,7 @@ export default class DishesList extends Component {
         this.state = {
           data: [],
           id: this.props.navigation.state.params.id,
+          restaurant_id: this.props.navigation.state.params.restaurant_id,
           isLoading: true,
           
         }
@@ -38,6 +39,23 @@ export default class DishesList extends Component {
       componentWillMount() {
     
         this.getdata();
+
+        AsyncStorage.getItem('USER', (err, result) => {
+          result = JSON.parse(result)
+          if(result==null){
+          }
+          else{
+            this.setState({
+              userId: result.userId,
+              userName: result.userName,
+              iSManager: result.iSManager,
+              isWaiter: result.isWaiter,
+              resId: result.resId,
+              islogged:true,
+            })
+          }
+        });
+
       }
 
       renderDishes() {
@@ -46,7 +64,7 @@ export default class DishesList extends Component {
         return Dishes.map((item) => {
             return (
               
-                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("Dish",{id:item.id,name:item.name})}>
+                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("Dish",{id:item.id,name:item.name,user_id:this.state.userId,restaurant_id:this.state.restaurant_id})}>
                     <Thumbnail square size={80} source={require('../images/Dinner-Icon.png')} />
                     <Body>
                       <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>

@@ -1,5 +1,5 @@
 import React from "react";
-import { StatusBar, Image, StyleSheet, ImageBackground, View, } from "react-native";
+import { StatusBar, Image, StyleSheet, ImageBackground, View, AsyncStorage } from "react-native";
 import {
   Button,
   Text,
@@ -68,6 +68,22 @@ export default class RestaurantProfile extends React.Component {
 
     this.getdata();
 
+    AsyncStorage.getItem('USER', (err, result) => {
+      result = JSON.parse(result)
+      if(result==null){
+      }
+      else{
+        this.setState({
+          userId: result.userId,
+          userName: result.userName,
+          iSManager: result.iSManager,
+          isWaiter: result.isWaiter,
+          resId: result.resId,
+          islogged:true,
+        })
+      }
+    });
+
 
 
 {/*
@@ -99,7 +115,7 @@ export default class RestaurantProfile extends React.Component {
     return Menu.map((item) => {
         return (
           
-          <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("DishesList", { id: item.id })}>
+          <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("DishesList", { id: item.id, restaurant_id:this.state.id })}>
           <Thumbnail square size={60} source={ require('../images/MenuLogo.png')} />
             <Body>
               <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
@@ -137,6 +153,29 @@ export default class RestaurantProfile extends React.Component {
               <Content style={styles.RestaurantImage}>
                 <Localimage source={logos[this.state.id]} originalWidth={1024} originalHeight={576} />
               </Content>
+            </Content>
+
+             <Content style={styles.TableReservation}>
+              <Card>
+                <CardItem>
+                  <Body>
+                    
+                    <Image source={require('../images/PreOrder.png')} style={{ width: 100, height: 100, alignSelf: 'center', marginTop: 4, marginBottom: 8 }} />
+
+                    <Button
+                      warning
+                      style={{ alignSelf: 'center', justifyContent: 'center', width: 180, marginTop: 4 }}
+                      onPress={() => this.props.navigation.navigate("PreOrder",{id:this.state.id,user_id:this.state.userId})}
+                    >
+                      <Text>My Pre-Orders</Text>
+                    </Button>
+
+                  </Body>
+                  
+
+
+                </CardItem>
+              </Card>
             </Content>
 
             <Content style={styles.TableReservation}>
