@@ -16,7 +16,7 @@ export default (MainScreenNavigator = TabNavigator(
     {
       RestaurantMenu: { screen: props => <RestaurantMenu {...props} /> },
       RestaurantInfo: { screen: props => <RestaurantInfo {...props} /> },
-      RestaurantOrders: { screen: props => <RestaurantOrders {...props} /> },
+     // RestaurantOrders: { screen: props => <RestaurantOrders {...props} /> },
     },
     {
       tabBarPosition: "bottom",
@@ -40,7 +40,9 @@ export default (MainScreenNavigator = TabNavigator(
                 <MaterialIcons name="location-on" size={24}/>
                 <Text>About</Text>
               </Button>
-              <Button
+            {/*
+            
+           <Button
                 vertical
                 active={props.navigationState.index === 2}
                 onPress={() => props.navigation.navigate("RestaurantOrders")}
@@ -48,6 +50,7 @@ export default (MainScreenNavigator = TabNavigator(
                 <MaterialIcons name="playlist-add-check" size={24}/>
                 <Text>Orders</Text>
               </Button>
+          */} 
             
             </FooterTab>
           </Footer>

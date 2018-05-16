@@ -10,7 +10,7 @@ let images = {
   }
 
 
-export default class DishesList extends Component {
+export default class WaiterSentOrders extends Component {
 
     constructor(props) {
         super(props)
@@ -18,17 +18,13 @@ export default class DishesList extends Component {
           data: [],
           id: this.props.navigation.state.params.id,
           user_id: this.props.navigation.state.params.user_id,
-          table_id: this.props.navigation.state.params.table_id,
-          isLoading: true,
-          total_price: 0
-          
+          isLoading: true,          
         }
         
       }
 
       getdata() {
-       
-        url = URL.getPreorderList(this.state.user_id, this.state.id);
+        url = URL.getWaiterSentOrders(this.state.user_id, this.state.id);
         return fetch(url)
           .then((response) => response.json())
           .then((responseJson) => {
@@ -41,55 +37,29 @@ export default class DishesList extends Component {
       }
     
       componentWillMount() {
-        DeviceEventEmitter.addListener('getPreorderList', (e)=>{this.getdata()});
-
+        DeviceEventEmitter.addListener('refreshWaiterSentOrders', (e)=>{this.getdata()});
           this.getdata();
             }
 
       renderDishes() {
-
-        this.state.total_price = 0;
-        return Dishes.map((item) => {
+    
+ 
+        return Orders.map((item) => {
             this.state.total_price=  this.state.total_price + (item.quantity*item.dish_price);
             
             return (
               
-                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("EditPreOrder",{id:item.id})}>
-                    <Thumbnail square size={80} source={require('../images/Dinner-Icon.png')} />
+                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("OrderInfo",{id:item.id,status:'Sent'})}>
+                    <Thumbnail square size={80} source={require('../images/MenuLogo.png')} />
                     <Body>
-                      <Text style={{ fontWeight: 'bold' }}>{item.dish_name}</Text>
-                      <Text>Size: {item.dish_size}</Text>
-                      <Text>Quantity: {item.quantity}</Text>
-                      <Text>Price: ₪ {item.dish_price}</Text>
-                      <Text>Total price: ₪ {item.quantity*item.dish_price}</Text>
-
+                      <Text style={{ fontWeight: 'bold' }}>order id: {item.id}</Text>
+                      <Text note>Table No: {item.table_id}</Text>
                     </Body>
                   </ListItem>
             );
         });
     }
 
-renderFooter(){
-    if(this.state.total_price>0)
-    return(
-        <Footer>
-                    <Left style={{marginLeft:15}}>
-                        <Text>Total Price:  </Text>
-                        <Text>₪ {this.state.total_price} </Text>
-                        
-                        </Left>
-                        <Body/>
-                        <Right style={{marginRight:10}}>
-                        <Button
-                    warning
-                    style={{ justifyContent: 'center', width: 180, marginBottom: 4, marginTop: 4  }}
-                    onPress={() => this.props.navigation.navigate("sendOrder",{id:this.state.id, user_id:this.state.user_id, total_price:this.state.total_price, table_id:this.state.table_id})}>
-                    <Text style={{color:'white'}}>Send Order</Text>
-                  </Button>
-                  </Right>
-                </Footer>
-    );
-}
 
 
   render() {
@@ -109,7 +79,7 @@ renderFooter(){
         )
     }
 
-    Dishes = this.state.data;
+    Orders = this.state.data;
 
     return (
       <Container>
@@ -125,9 +95,6 @@ renderFooter(){
             </List>
           </View>
           </Content>
-
-          
-          {this.renderFooter()}
 
         </ImageBackground>
       </Container>

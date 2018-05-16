@@ -119,6 +119,23 @@ getRestaurantWaiters(){
     
     }
 
+remove_client(){
+  url = URL.remove_client(this.state.id)
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      user_id: this.state.data.user_id,
+    }),
+  });
+  
+    alert('The table has been edited.');
+    this.props.navigation.goBack('');
+}
+
   componentWillMount() {
     
   this.getdata();
@@ -217,7 +234,16 @@ getRestaurantWaiters(){
               this.state.assigned_waiter=null;
               this.update();
             }}>
-            <Text>No waiter</Text>
+            <Text>Remove the waiter</Text>
+             </Button>
+
+              <Button
+             warning
+            style={{alignSelf:'center',justifyContent:'center' ,width:200, marginTop: 4}}
+            onPress={() =>{
+              this.remove_client();
+            }}>
+            <Text>Remove the client</Text>
              </Button>
 
              <Button

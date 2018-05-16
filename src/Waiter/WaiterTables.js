@@ -7,13 +7,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import URL from '../URLs'
 
 
-export default class ManageTables extends Component {
+export default class WaiterTables extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
       data: [],
       id: this.props.navigation.state.params.id,
+      user_id: this.props.navigation.state.params.user_id,
       isLoading: true,
       
     }
@@ -21,15 +22,15 @@ export default class ManageTables extends Component {
   }
 
   getdata() {
-    url = URL.getRestaurantTables(this.state.id)
+    url = URL.getWaiterTables(this.state.user_id,this.state.id);
     return fetch(url)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({ data: responseJson, isLoading:false });        
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({ data: responseJson, isLoading:false });        
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   componentWillMount() {
@@ -46,36 +47,19 @@ export default class ManageTables extends Component {
   renderButtons() {
     
  
-    return restaurants.map((item) => {
+    return tables.map((item) => {
 
-      if(item.worker!=null)
-        return (
-          
-            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("EditTable",{id:item.id, restaurant_id:this.state.id})}>
-                <Thumbnail square size={80} source={require('../images/table-icon.png')} />
-                <Body>
-                  <Text style={{ fontWeight: 'bold' }}>Table No: {item.name}</Text>
-                  <Text note >id: {item.id} </Text>
-                  <Text note >Waiter: {item.worker.name} </Text>
-                  <Text note >Client id: {item.user_id} </Text>
-                </Body>
-              </ListItem>
-        );
-
-        else {
           return (
           
-            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("EditTable",{id:item.id,restaurant_id:this.state.id})}>
+            <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("",{id:item.id,restaurant_id:this.state.id})}>
                 <Thumbnail square size={80} source={require('../images/table-icon.png')} />
                 <Body>
                   <Text style={{ fontWeight: 'bold' }}>Table No: {item.name}</Text>
                   <Text note >id: {item.id} </Text>
-                  <Text note >Waiter: </Text>
                   <Text note >Client id: {item.user_id} </Text>
                 </Body>
               </ListItem>
         );
-        }
     });
 }
 
@@ -97,19 +81,11 @@ export default class ManageTables extends Component {
       )
   }
 
-    restaurants = this.state.data;
+    tables = this.state.data;
 
     return (
       <Container>
         <ImageBackground source={require('../images/background2.jpg')} style={{ flex: 1, width: '100%', height: '100%' }}>
-        
-        <Button
-                                warning
-                                style={{ alignSelf: 'center', justifyContent: 'center', width: 300, marginBottom: 8, marginTop:8 }}
-                                onPress={() => this.props.navigation.navigate("AddNewTable",{id:this.state.id})}
-                            >
-                                <Text>Add New Table</Text>
-                            </Button>
 
           <Content>
           <View style={{ backgroundColor: 'white' }}>

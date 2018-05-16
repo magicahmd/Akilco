@@ -57,6 +57,8 @@ export default class HomeScreen extends React.Component {
   alert('Please enter a right phone number');
   else if (this.state.password == '')
     alert('Please enter your password');
+    else if (this.state.password.length<6)
+    alert('Passwords should be at least 6 letters.');
     else if (this.state.confirm_password == '')
     alert('Please confirm your password');
     else if(this.state.password!=this.state.confirm_password)
@@ -112,9 +114,13 @@ export default class HomeScreen extends React.Component {
     return (
       <Container>
          <ImageBackground source={require('../images/background2.jpg')}  style={{flex:1,width:'100%',height:'100%'}}>
+         
         
 
         <Content padder>
+
+                      <Image source={require('../images/register.png')} style={{ width: 100, height: 100, alignSelf: 'center', marginTop: 20, }} />
+
         <View >
         <Form style={styles.signForm}>
             <Item>
@@ -162,11 +168,11 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
  
   signForm:{
-    marginTop: 50,
+    marginTop: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 6, 
     borderWidth: 0.5,
-    borderColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   }
 });
 

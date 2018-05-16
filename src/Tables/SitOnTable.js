@@ -9,13 +9,32 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import { BarCodeScanner, Permissions } from 'expo';
 
+import URL from '../URLs'
+
 export default class SitOnTable extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: [],
+      isLoading: true,
+      checked: 0,
+      restaurant_id: this.props.navigation.state.params.restaurant_id,
+      user_id: this.props.navigation.state.params.user_id,
+
+
+    }
+
+  }
+
   state = {
     hasCameraPermission: null,
     lastScannedUrl: null,
+
   };
 
   componentDidMount() {
@@ -35,6 +54,9 @@ export default class SitOnTable extends Component {
       this.setState({ lastScannedUrl: result.data });
     }
   };
+
+  componentWillMount(){
+  }
 
   render() {
     return (
@@ -61,14 +83,57 @@ export default class SitOnTable extends Component {
     );
   }
 
+  reserve_table(){
+    url = URL.assign_client();
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: this.state.lastScannedUrl,
+        user_id: this.state.user_id,
+      })
+    }).then((response) => response.json())
+    .then((responseJson) => {
+      this.setState({ data: responseJson});
+      this.check_table();
+     
+
+    });
+  }
+
+  check_table(){
+    if(this.state.data==0){
+      alert('This table is not available');
+
+    }
+
+    else{
+      table = {
+        id: this.state.data[0].id,
+        name: this.state.data[0].name,
+        restaurant_id: this.state.data[0].restaurant_id,
+      }
+      AsyncStorage.setItem('TABLE', JSON.stringify(table));
+      alert('This table is yours!');
+      this.props.navigation.navigate("Drawer");
+
+    }
+  }
+
+
   _handlePressUrl = () => {
     Alert.alert(
       'Reserve this table ?',
-      this.state.lastScannedUrl,
+      'Table id: '+ this.state.lastScannedUrl,
       [
         {
           text: 'Yes',
-          onPress: () => this.props.navigation.goBack(null),
+         // onPress: () => this.props.navigation.goBack(null),
+         onPress: () => this.reserve_table(),
+
         },
         { text: 'No', onPress: () => {} },
       ],
@@ -89,7 +154,7 @@ export default class SitOnTable extends Component {
       <View style={styles.bottomBar}>
         <TouchableOpacity style={styles.url} onPress={this._handlePressUrl}>
           <Text numberOfLines={1} style={styles.urlText}>
-            {this.state.lastScannedUrl}
+            Reserve this table
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

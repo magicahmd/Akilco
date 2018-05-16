@@ -6,7 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import URL from '../URLs'
 
-export default class EditPreOrder extends React.Component {
+export default class EditOrder extends React.Component {
 
   /*constructor(props){
     super(props);
@@ -37,7 +37,7 @@ export default class EditPreOrder extends React.Component {
   }
 
   getdata() {
-    url = URL.show_preorder(this.state.id);
+    url = URL.show_order_info(this.state.id);
     return fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -73,10 +73,8 @@ export default class EditPreOrder extends React.Component {
   }
 
 
-
-
   add_preorder() {
-    url = URL.edit_preorder(this.state.id);
+    url = URL.edit_order(this.state.id);
     fetch(url, {
       method: 'POST',
       headers: {
@@ -89,13 +87,13 @@ export default class EditPreOrder extends React.Component {
       }),
     });
 
-    DeviceEventEmitter.emit('getPreorderList', {});
+    DeviceEventEmitter.emit('refreshWaiterOrderList', {});
     this.props.navigation.goBack('');
 
   }
 
   delete_preorder() {
-    url = URL.delete_preorder(this.state.id);
+    url = URL.delete_order_info(this.state.id);
     fetch(url, {
       method: 'DELETE',
       headers: {
@@ -104,7 +102,7 @@ export default class EditPreOrder extends React.Component {
       },
     });
 
-    DeviceEventEmitter.emit('getPreorderList', {});
+    DeviceEventEmitter.emit('refreshWaiterOrderList', {});
     this.props.navigation.goBack('');
 
   }

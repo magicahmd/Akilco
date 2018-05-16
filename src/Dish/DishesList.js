@@ -64,7 +64,7 @@ export default class DishesList extends Component {
         return Dishes.map((item) => {
             return (
               
-                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("Dish",{id:item.id,name:item.name,user_id:this.state.userId,restaurant_id:this.state.restaurant_id})}>
+                <ListItem style={styles.listItemContainer} onPress={() => this.props.navigation.navigate("Dish",{id:item.id,name:item.name,user_id:this.state.userId,restaurant_id:this.state.restaurant_id,dish_discription:item.discription})}>
                     <Thumbnail square size={80} source={require('../images/Dinner-Icon.png')} />
                     <Body>
                       <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>

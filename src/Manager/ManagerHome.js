@@ -133,7 +133,7 @@ export default class ManagerHome extends React.Component {
                             </Card>
 
                             <Card style={{ width: 120, marginRight: 12 }}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate("ManageTables",{id:1})}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate("ManageTables",{id:this.state.id})}>
                                 <Image source={require('../images/table-icon.png')} style={{ width: 120, height: 120, alignSelf: 'center', margin: 8 }} />
                                 <Text style={{ alignSelf: 'center', marginBottom: 8 }}>Tables</Text>
                                 </TouchableOpacity>

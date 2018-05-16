@@ -113,7 +113,21 @@ export default class HomeScreen extends React.Component {
       userName: this.state.data[0].name,
       iSManager: false,
       isWaiter: false,
+      isChef: false,
     }
+
+
+   /* if(this.state.data[0].table != null){
+
+      table = {
+        id: this.state.data[0].table.id,
+        name: this.state.data[0].table.name,
+        restaurant_id: this.state.data[0].table.restaurant_id,
+      }
+
+      AsyncStorage.setItem('TABLE', JSON.stringify(table));
+
+    }*/
 
     if(this.state.role.length!=0){
       if(this.state.role[0].pivot.role_id==2){
@@ -125,9 +139,15 @@ export default class HomeScreen extends React.Component {
         user.resId = this.state.role[0].pivot.restaurant_id;
         user.isWaiter=true;
       }
+
+      if(this.state.role[0].pivot.role_id==4){
+        user.resId = this.state.role[0].pivot.restaurant_id;
+        user.isChef=true;
+      }
      
     }
     AsyncStorage.setItem('USER', JSON.stringify(user));
+
     this.props.navigation.navigate("Drawer");
    //this.props.navigation.goBack(this.forceUpdate());
     
@@ -144,17 +164,17 @@ export default class HomeScreen extends React.Component {
 
             <View style={styles.HomeContent}>
 
-              <Image source={require('../images/LoginIcon.png')} style={{ width: 120, height: 120, alignSelf: 'center', marginTop: 20, }} />
+              <Image source={require('../images/hungry.png')} style={{ width: 100, height: 100, alignSelf: 'center', marginTop: 20, }} />
 
               <Form>
                 <Item floatingLabel>
                   <Label>Email</Label>
-                  <Input onChangeText={(email) => this.setState({ email })} />
+                  <Input onChangeText={(email) => this.setState({ email })} style={{textAlign :'left'}} />
                 </Item>
 
                 <Item floatingLabel>
                   <Label>Password</Label>
-                  <Input secureTextEntry={true} onChangeText={(password) => this.setState({ password })} />
+                  <Input secureTextEntry={true} onChangeText={(password) => this.setState({ password })} style={{textAlign :'left'}} />
                 </Item>
 
                 {/*  <Item floatingLabel password>
@@ -197,7 +217,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 6,
     borderWidth: 0.5,
-    borderColor: 'rgba(0, 0, 0, 0.3)',
+    borderColor: 'rgba(0, 0, 0, 0.1)',
   },
 });
 

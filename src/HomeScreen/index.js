@@ -29,6 +29,20 @@ import EditTable from "../Manager/EditTable"
 
 import PreOrder from '../Order/PreOreder'
 import EditPreOrder from '../Order/EditPreOrder'
+import EditOrder from '../Order/EditOrder'
+
+import sendOrder from '../Order/sendOrder'
+import WaiterHome from '../Waiter/WaiterHome'
+import WaiterTables from '../Waiter/WaiterTables'
+import WaiterOrders from '../Waiter/WaiterOrders'
+import WaiterSentOrders from '../Waiter/WaiterSentOrders'
+import WaiterReadyOrders from '../Waiter/WaiterReadyOrders'
+import WaiterOnTableOrders from '../Waiter/WaiterOnTableOrders'
+import OrderInfo from '../Order/OrderInfo'
+import RequestsList from '../Requests/RequestsList'
+
+import ChefHome from '../Chef/ChefHome'
+
 
 
 
@@ -104,6 +118,22 @@ const HomeScreenRouter = StackNavigator({
        headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
   },
 
+  OrderInfo: 
+  {  screen: OrderInfo,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  sendOrder: 
+  {  screen: sendOrder,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
   EditPreOrder:
   {  screen: EditPreOrder,
     
@@ -111,6 +141,14 @@ const HomeScreenRouter = StackNavigator({
       headerTintColor: 'white',
       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
  },
+
+ EditOrder:
+ {  screen: EditOrder,
+   
+   navigationOptions: {
+     headerTintColor: 'white',
+     headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+},
   
   RestaurantMenu: {screen:RestaurantMenu},
   ExpandableList: {screen:ExpandableList},
@@ -160,6 +198,83 @@ const HomeScreenRouter = StackNavigator({
        headerTintColor: 'white',
        headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
   },
+
+  WaiterHome: 
+  {  screen: WaiterHome,
+    
+     navigationOptions: {
+       headerTintColor: 'white',
+       headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+  },
+
+  ChefHome:
+  {  screen: ChefHome,
+    
+    navigationOptions: {
+      headerTintColor: 'white',
+      headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+ },
+
+  WaiterTables:
+  {  screen: WaiterTables,
+    
+    navigationOptions: {
+      title: 'My Tables',
+      headerTintColor: 'white',
+      headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+ },
+
+ RequestsList:
+ {  screen: RequestsList,
+    
+  navigationOptions: {
+    title: 'Requests',
+    headerTintColor: 'white',
+    headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+},
+
+ WaiterOnTableOrders:
+ {  screen: WaiterOnTableOrders,
+   
+  navigationOptions: {
+    title: 'On Table',
+    headerTintColor: 'white',
+    headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+},
+
+
+ WaiterOrders:
+ {  screen: WaiterOrders,
+   
+   navigationOptions: {
+     title: 'Active Orders',
+     headerTintColor: 'white',
+     headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+},
+
+WaiterSentOrders:
+{  screen: WaiterSentOrders,
+
+  
+  navigationOptions: {
+    title: 'Sent Orders',
+    headerTintColor: 'white',
+    headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' },
+  },
+
+ 
+
+},
+
+
+WaiterReadyOrders:
+{  screen: WaiterReadyOrders,
+  
+  navigationOptions: {
+    title: 'Ready Orders',
+    headerTintColor: 'white',
+    headerStyle: { backgroundColor: '#a62127', borderBottomColor: '#a62127' }}
+},
 
   AddNewList: 
   {  screen: AddNewList,
